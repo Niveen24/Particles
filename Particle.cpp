@@ -162,6 +162,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 
     m_vx = rand() % 2;
     if (m_vx != 0) m_vx *= 1; //randomly pos or neg
+	m_vy = rand() % 401 + 100; //random val 100 to 500
 
     m_color1 = Color(217,48,165,255);
     m_color2 = Color(35,240,212,255);
