@@ -15,13 +15,16 @@ void Engine::input()
 			m_Window.close(); //quit game when closed
 		}
 
-		if (event.type == sf::Event::MouseButtonPressed  && event.mouseButton.button == sf::Mouse::Left)	//if left mouse button clicked
+		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			for (int i = 0; i < 5; i++) //create 5 particles
+			if (event.mouseButton.button == sf::Mouse::Left)	//if left mouse button clicked
 			{
-				int numPoints = rand() % 26 + 25; //random num 25-50
-				Particle p(m_Window, numPoints, {event.mouseButton.x, event.mouseButton.y }); //make particle at mouse click coords
-				m_particles.push_back(p); //add particle to vector
+				for (int i = 0; i < 5; i++) //create 5 particles
+				{
+					int numPoints = rand() % 26 + 25; //random num 25-50
+					Particle p(m_Window, numPoints, { event.mouseButton.x, event.mouseButton.y }); //make particle at mouse click coords
+					m_particles.push_back(p); //add particle to vector
+				}
 			}
 		}
 	}
