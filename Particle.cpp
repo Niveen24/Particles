@@ -163,8 +163,8 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_vx = rand() % 2;
     if (m_vx != 0) m_vx *= 1; //randomly pos or neg
 
-    m_color1 = Color(217,48,165,1);
-    m_color2 = Color(35,240,212,1);
+    m_color1 = Color(217,48,165,255);
+    m_color2 = Color(35,240,212,255);
 
     float theta = ((float)rand() / (float)RAND_MAX) * (M_PI / (float)2);
     float dTheta = (2 * M_PI) / (numPoints - 1);
