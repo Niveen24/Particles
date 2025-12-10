@@ -1,59 +1,80 @@
 #include "Engine.h"
 
-/*
+Engine::Engine()
+{
+	m_Window.create(VideoMode::getDesktopMode(), "Particles", Style::Default);
+}
 
-TODO:
-	Engine()
-		call create on m_Window to populate RenderWindow member variable
-		call VideoMode::getDesktopMode() to get the screen resolution
+void Engine::input()
+{
+	Event event;
+	while (m_Window.pollEvent(event))
+	{
+		if (event.type == Event::Closed)
+		{
+			m_Window.close(); //quit game when closed
+		}
 
+		if (event.type == sf::Event::MouseButtonPressed  && event.mouseButton.button == sf::Mouse::Left)	//if left mouse button clicked
+		{
+			for (int i = 0; i < 5; i++) //create 5 particles
+			{
+				int numPoints = rand() % 26 + 25; //random num 25-50
+				Particle p(m_Window, numPoints, {event.mouseButton.x, event.mouseButton.y }); //make particle at mouse click coords
+				m_particles.push_back(p); //add particle to vector
+			}
+		}
+	}
 
-TODO:
-	run()
-		Construct a local Clock object to track Time per frame
-		(The time differential (dt) since the last frame will be passed into update)
-		Construct a local Particle to be used for the unit tests.
-		After the unit tests are complete, create your game loop:
-			Loop while m_Window is open
-			Restart the clock (this will return the time elapsed since the last frame)
-			Convert the clock time to seconds
-			Call input
-			Call update
-			Call draw
+	if (Keyboard::isKeyPressed(Keyboard::Escape))	//if escape key pressed, exit
+	{
+		m_Window.close();
+	}
+}
 
-TODO:
-	input()
-		Poll the Windows event queue
-		Handle the Escape key pressed and closed events so your program can exit
-		Handle the left mouse button pressed event
-		Create a loop to construct 5 particles (I used 5, you can change this if you want)
-		The numPoints parameter in the Particle constructor is a random number in the range [25:50]
-		Pass the position of the mouse click into the Particle constructor so it has a starting position
+void Engine::update(float dtAsSeconds)
+{
+	for (auto i = m_particles.begin(); i != m_particles.end();)
+	{
+		if (i->getTTL() > 0.0) //particle still alive
+		{
+			i->update(dtAsSeconds);
+			i++;
+		}
+		else //ttl dead x_x
+		{
+			i = m_particles.erase(i); //erases particle and i == next element
+		}
+	}
+}
 
+void Engine::draw()
+{
+	m_Window.clear();
+	for (auto& particle : m_particles)	//for each object in particle vector
+	{
+		m_Window.draw(particle);	//calls polymorphic draw NOT the sfml draw
+	}
+	m_Window.display();
+}
 
+void Engine::run()
+{
+	Clock clock; //local clock to track time per frame
 
-TODO:
-	update(float dtAsSeconds)
-		The general idea here is to loop through m_particles and call update on each Particle in the vector whose ttl (time to live) has not expired
-		If a particle's ttl has expired, it must be erased from the vector
-		This is best done with an iterator-based for-loop
-		Don't automatically increment the iterator for each iteration
-		if getTTL() > 0.0
-			Call update on that Particle
-				Pass in the time differential since the last frame (dt)
-			increment the iterator
-		else
-			erase the element the iterator points to
-			erase returns an iterator that points to the next element after deletion, or end if it is the end of the vector
-				Assign the iterator to this return value
-			Do not increment the iterator (if you do you might increment past the end of the vector after you delete the last element)
+	//unit test code
+	cout << "Starting Particle unit tests..." << endl;	
+	Particle p(m_Window, 4, { (int)m_Window.getSize().x / 2, (int)m_Window.getSize().y / 2 });
+	p.unitTests();
+	cout << "Unit tests complete.  Starting engine..." << endl;
 
-TODO:
-	draw()
-		clear the window
-		Loop through each Particle in m_Particles
-			Pass each element into m_Window.draw()
-			Note:  This will use polymorphism to call your Particle::draw() function
-		display the window	
-
-*/
+	//game loop
+	while (m_Window.isOpen())
+	{
+		Time dt = clock.restart(); //restart clock
+		float dtSeconds = dt.asSeconds();
+		input();
+		update(dtSeconds);
+		draw();
+	}
+}
