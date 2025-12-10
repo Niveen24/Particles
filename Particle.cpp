@@ -185,7 +185,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 void Particle::draw(RenderTarget& target, RenderStates states) const    //this is an override
 {
     VertexArray lines(TriangleFan, m_numPoints + 1);
-    Vector2f center(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane));
+    Vector2f center(Vector2f(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane)));
     lines[0].position = center;
 	lines[0].color = m_color1;
 
@@ -203,6 +203,7 @@ void Particle::update(float dt)
 	rotate(dt * m_radiansPerSec);
     scale(SCALE);
     float dx, dy;
+    dx = m_vx * dt;
 	m_vy -= G * dt; //gravity effect
     dy = m_vy * dt;
     translate(dx, dy);
