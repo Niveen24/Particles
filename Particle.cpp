@@ -144,3 +144,49 @@ void Particle::unitTests()
 
     cout << "Score: " << score << " / 7" << endl;
 }
+
+
+
+//other functions that were defined in header file but not impemented:
+
+Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosition)
+	: m_A(2, numPoints) //construct in initializer list (2 rows, numPoints columns)
+{
+    m_ttl = TTL; //5 second lifetime
+    m_numPoints = numPoints;
+    m_radiansPerSec = ((float)rand() / (RAND_MAX)) * M_PI;  //random velocity [0,1) 
+    m_cartesianPlane.setCenter(0, 0);
+    m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
+    m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
+
+    m_vx = rand() % 2;
+    if (m_vx != 0) m_vx *= 1; //randomly pos or neg
+
+    m_color1 = Color(217,48,165,1);
+    m_color2 = Color(35,240,212,1);
+
+    float theta = ((float)rand() / (float)RAND_MAX) * (M_PI / (float)2);
+    float dTheta = (2 * M_PI) / (numPoints - 1);
+
+    for (int j = 0; j < numPoints; j++)
+    {
+        float r, dx, dy;
+        r = 20 + (rand() % (61)); // r = rand val 20 to 80
+        dx = r * cos(theta);
+        dy = r * sin(theta);
+        m_A(0, j) = m_centerCoordinate.x + dx;
+        m_A(1, j) = m_centerCoordinate.y + dy;
+
+        theta += dTheta; //move to next location
+    }
+}
+
+void Particle::draw(RenderTarget& target, RenderStates states) const    //this is an override
+{
+    
+}
+
+void Particle::update(float dt)
+{
+
+}
