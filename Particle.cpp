@@ -1,4 +1,5 @@
 #include "Particle.h"
+using namespace std;
 
 
 bool Particle::almostEqual(double a, double b, double eps)
@@ -190,7 +191,7 @@ void Particle::draw(RenderTarget& target, RenderStates states) const    //this i
 
     for (int j = 1; j <= m_numPoints; j++)
     {
-		lines[j].position = target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane); //map from Cartesian to screen coords
+        lines[j].position = (Vector2f)target.mapCoordsToPixel(Vector2f(m_A(0, j - 1), m_A(1, j - 1)), m_cartesianPlane);
 		lines[j].color = m_color2;
     }
     target.draw(lines);
