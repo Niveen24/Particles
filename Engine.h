@@ -24,6 +24,8 @@ private:
 	//stuff for stewie griffin extra credit :D
 	Texture texture;
 	Sprite sprite;
+	Texture bgTexture;
+	Sprite bgSprite;
 	SoundBuffer soundBuffers[9]; //actual sound stuff
 	Sound sound; //to play the sounds
 	int currentIndex = 0;

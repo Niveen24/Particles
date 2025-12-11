@@ -10,6 +10,13 @@ Engine::Engine()
 	sprite.setOrigin(texture.getSize().x / 2.0, texture.getSize().y / 2.0);
 	sprite.setPosition(m_Window.getSize().x / 2.0, m_Window.getSize().y / 2.0);
 	originalSpritePos = sprite.getPosition();
+	//bg
+	bgTexture.loadFromFile("assets/background.jpg");
+	bgSprite.setTexture(bgTexture);
+	bgSprite.setPosition(0, 0);
+	float scaleX = (m_Window.getSize().x / float(bgTexture.getSize().x)) * 1.0;
+	float scaleY = (m_Window.getSize().y / float(bgTexture.getSize().y)) * 1.0;
+	bgSprite.setScale(scaleX, scaleY);
 	//load stewie sounds
 	soundBuffers[0].loadFromFile("assets/audio_stewie_4.wav");
 	soundBuffers[1].loadFromFile("assets/audio_stewie.wav");
@@ -57,6 +64,8 @@ void Engine::input()
 					texture.loadFromFile(images[currentIndex]);
 					sprite.setTexture(texture, true);
 					sprite.setOrigin(texture.getSize().x / 2.0, texture.getSize().y / 2.0);
+					Texture bgTexture;
+					Sprite bgSprite;
 					sound.setBuffer(soundBuffers[currentIndex]);//soud change
 					sound.play();
 					gotHit = true; //oh no someone hit stewie
@@ -151,6 +160,7 @@ void Engine::update(float dtAsSeconds)
 void Engine::draw()
 {
 	m_Window.clear();
+	m_Window.draw(bgSprite); //background
 	m_Window.draw(sprite); //STEWIE
 	for (auto& particle : m_particles)	//for each object in particle vector
 	{
