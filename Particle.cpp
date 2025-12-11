@@ -235,3 +235,11 @@ void Particle::translate(double xShift, double yShift)
     m_centerCoordinate.x += xShift;
     m_centerCoordinate.y += yShift;
 }
+
+//for stewie hit effect
+
+void Particle::setColors(const Color& c1, const Color& c2) //easy function to set both colors
+{
+    m_color1 = c1;
+    m_color2 = c2;
+}

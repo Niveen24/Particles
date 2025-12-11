@@ -21,6 +21,8 @@ public:
     bool almostEqual(double a, double b, double eps = 0.0001);
     void unitTests();
 
+	void setColors(const Color& c1, const Color& c2); //for stewie hit effect, just func to set both colors at once
+
 private:
     float m_ttl;
     int m_numPoints;

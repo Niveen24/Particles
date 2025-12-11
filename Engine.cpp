@@ -3,6 +3,18 @@
 Engine::Engine()
 {
 	m_Window.create(VideoMode::getDesktopMode(), "Particles", Style::Default);
+
+	//stewie stuff:
+	texture.loadFromFile("assets/stewie1.png");
+	sprite.setTexture(texture);
+	sprite.setOrigin(texture.getSize().x / 2.0, texture.getSize().y / 2.0);
+	sprite.setPosition(m_Window.getSize().x / 2.0, m_Window.getSize().y / 2.0);
+	originalSpritePos = sprite.getPosition();
+	//load stewie sounds
+	soundBuffers[0].loadFromFile("assets/audio_stewie.wav");
+	soundBuffers[1].loadFromFile("assets/audio_stewie_2.wav");
+	soundBuffers[2].loadFromFile("assets/audio_stewie_3.wav");
+	soundBuffers[3].loadFromFile("assets/audio_stewie_4.wav");
 }
 
 void Engine::input()
@@ -19,11 +31,70 @@ void Engine::input()
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)	//if left mouse button clicked
 			{
-				for (int i = 0; i < 5; i++) //create 5 particles
+
+				//stewie stuff:
+
+				Vector2f mousePos = m_Window.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y)); //gets mouse pos
+				bool spriteHit = sprite.getGlobalBounds().contains(mousePos);	//checks if mouse pos is inside stewie bounds
+				if (spriteHit)
 				{
-					int numPoints = rand() % 26 + 25; //random num 25-50
-					Particle p(m_Window, numPoints, { event.mouseButton.x, event.mouseButton.y }); //make particle at mouse click coords
-					m_particles.push_back(p); //add particle to vector
+					currentIndex = (currentIndex + 1) % 4;	//cycle stewie image
+
+					string images[4] =	//ADD IMAGES HERE
+					{
+						"assets/stewie1.png",
+						"assets/stewie2.png",
+						"assets/stewie3.png",
+						"assets/stewie4.png"
+					};
+
+					texture.loadFromFile(images[currentIndex]);
+					sprite.setTexture(texture, true);
+					sprite.setOrigin(texture.getSize().x / 2.0, texture.getSize().y / 2.0);
+					sound.setBuffer(soundBuffers[currentIndex]);//soud change
+					sound.play();
+					gotHit = true; //oh no someone hit stewie
+					hitTimer = 0.15;
+					sprite.setColor(Color::Red); //make him red
+					//particle burst
+					Vector2f pos = sprite.getPosition();
+					Vector2i pixelPos((int)pos.x, (int)pos.y);
+
+						for (int b = 0; b < 120; b++) //bigger burst
+						{
+							int offx = (rand() % 1400) - 700; //-700 to 700
+							int offy = (rand() % 1400) - 700;
+
+							if (rand() % 4 == 0)
+							{
+								offx /= 4;
+								offy /= 4;
+							}
+
+							if (rand() % 7 == 0)
+							{
+								offx *= 2;
+								offy *= 2;
+							}
+
+							Vector2i pos(pixelPos.x + offx, pixelPos.y + offy); //random offset from stewie pos
+							int numPoints = rand() % 26 + 25;
+							Particle burst(m_Window, numPoints, pos);	//make particle at mouse click
+
+							burst.setColors(Color::Red, Color::Yellow); //make stewie hit particles red/yellow
+							m_particles.push_back(burst);
+
+						}
+				}
+				
+				else   //normal particles as per assignment, else state so it doesnt do this if stewie is hit
+				{
+					for (int i = 0; i < 5; i++) //create 5 particles
+					{
+						int numPoints = rand() % 26 + 25; //random num 25-50
+						Particle p(m_Window, numPoints, { event.mouseButton.x, event.mouseButton.y }); //make particle at mouse click coords
+						m_particles.push_back(p); //add particle to vector
+					}
 				}
 			}
 		}
@@ -49,11 +120,32 @@ void Engine::update(float dtAsSeconds)
 			i = m_particles.erase(i); //erases particle and i == next element
 		}
 	}
+
+
+	//stewie stuff:
+
+	if (gotHit)
+	{
+		hitTimer -= dtAsSeconds;	//timer for hit 
+
+		//shake stewie around orig position
+		float offsetX = (float)(rand() % (int)(2 * shakeStrength)) - shakeStrength;
+		float offsetY = (float)(rand() % (int)(2 * shakeStrength)) - shakeStrength;
+		sprite.setPosition(originalSpritePos.x + offsetX, originalSpritePos.y + offsetY);
+
+		if (hitTimer <= 0.0) //timer done
+		{
+			gotHit = false;
+			sprite.setColor(Color::White); //red tint off
+			sprite.setPosition(originalSpritePos);
+		}
+	}
 }
 
 void Engine::draw()
 {
 	m_Window.clear();
+	m_Window.draw(sprite); //STEWIE
 	for (auto& particle : m_particles)	//for each object in particle vector
 	{
 		m_Window.draw(particle);	//calls polymorphic draw NOT the sfml draw
