@@ -2,7 +2,7 @@
 
 Engine::Engine()
 {
-	m_Window.create(VideoMode::getDesktopMode(), "Particles", Style::Default);
+	m_Window.create(VideoMode::getDesktopMode(), "Particle Guy", Style::Default);
 
 	//stewie stuff:
 	texture.loadFromFile("assets/stewie5.png");
