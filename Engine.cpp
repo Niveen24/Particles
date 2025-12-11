@@ -5,16 +5,19 @@ Engine::Engine()
 	m_Window.create(VideoMode::getDesktopMode(), "Particles", Style::Default);
 
 	//stewie stuff:
-	texture.loadFromFile("assets/stewie1.png");
+	texture.loadFromFile("assets/stewie5.png");
 	sprite.setTexture(texture);
 	sprite.setOrigin(texture.getSize().x / 2.0, texture.getSize().y / 2.0);
 	sprite.setPosition(m_Window.getSize().x / 2.0, m_Window.getSize().y / 2.0);
 	originalSpritePos = sprite.getPosition();
 	//load stewie sounds
-	soundBuffers[0].loadFromFile("assets/audio_stewie.wav");
-	soundBuffers[1].loadFromFile("assets/audio_stewie_2.wav");
-	soundBuffers[2].loadFromFile("assets/audio_stewie_3.wav");
-	soundBuffers[3].loadFromFile("assets/audio_stewie_4.wav");
+	soundBuffers[0].loadFromFile("assets/audio_stewie_4.wav");
+	soundBuffers[1].loadFromFile("assets/audio_stewie.wav");
+	soundBuffers[2].loadFromFile("assets/what-the-deuce.wav");
+	soundBuffers[3].loadFromFile("assets/audio_stewie_3.wav");
+	soundBuffers[4].loadFromFile("assets/audio_peter_3.wav");
+	soundBuffers[5].loadFromFile("assets/audio_peter_2.wav");
+	soundBuffers[6].loadFromFile("assets/does-a-dog-not-feel.wav");
 }
 
 void Engine::input()
@@ -38,14 +41,17 @@ void Engine::input()
 				bool spriteHit = sprite.getGlobalBounds().contains(mousePos);	//checks if mouse pos is inside stewie bounds
 				if (spriteHit)
 				{
-					currentIndex = (currentIndex + 1) % 4;	//cycle stewie image
+					currentIndex = (currentIndex + 1) % 7;	//cycle stewie image
 
-					string images[4] =	//ADD IMAGES HERE
+					string images[7] =	//ADD IMAGES HERE
 					{
-						"assets/stewie1.png",
+						"assets/stewie5.png",
 						"assets/stewie2.png",
+						"assets/stewie4.png",
 						"assets/stewie3.png",
-						"assets/stewie4.png"
+						"assets/Peter_Griffin.png",
+						"assets/peter2.png",
+						"assets/brian.png"
 					};
 
 					texture.loadFromFile(images[currentIndex]);
