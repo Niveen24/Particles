@@ -25,6 +25,7 @@ Engine::Engine()
 	soundBuffers[4].loadFromFile("assets/audio_peter_3.wav");
 	soundBuffers[5].loadFromFile("assets/audio_peter_2.wav");
 	soundBuffers[6].loadFromFile("assets/does-a-dog-not-feel.wav");
+	soundBuffers[7].loadFromFile("assets/begForA.wav");
 }
 
 void Engine::input()
@@ -48,9 +49,9 @@ void Engine::input()
 				bool spriteHit = sprite.getGlobalBounds().contains(mousePos);	//checks if mouse pos is inside stewie bounds
 				if (spriteHit)
 				{
-					currentIndex = (currentIndex + 1) % 7;	//cycle stewie image
+					currentIndex = (currentIndex + 1) % 8;	//cycle stewie image
 
-					string images[7] =	//ADD IMAGES HERE
+					string images[8] =	//ADD IMAGES HERE
 					{
 						"assets/stewie5.png",
 						"assets/stewie2.png",
@@ -58,7 +59,8 @@ void Engine::input()
 						"assets/stewie3.png",
 						"assets/Peter_Griffin.png",
 						"assets/peter2.png",
-						"assets/brian.png"
+						"assets/brian.png",
+						"assets/crying.png"
 					};
 
 					texture.loadFromFile(images[currentIndex]);
