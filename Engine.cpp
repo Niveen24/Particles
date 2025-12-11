@@ -69,7 +69,7 @@ void Engine::input()
 					sound.setBuffer(soundBuffers[currentIndex]);//soud change
 					sound.play();
 					gotHit = true; //oh no someone hit stewie
-					hitTimer = 0.15;
+					hitTimer = 0.3;
 					sprite.setColor(Color::Red); //make him red
 					//particle burst
 					Vector2f pos = sprite.getPosition();
@@ -80,7 +80,7 @@ void Engine::input()
 							int offx = (rand() % 1400) - 700; //-700 to 700
 							int offy = (rand() % 1400) - 700;
 
-							if (rand() % 4 == 0)
+							if (rand() % 4 == 0) 
 							{
 								offx /= 4;
 								offy /= 4;
